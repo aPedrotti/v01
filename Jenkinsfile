@@ -1,8 +1,9 @@
 pipeline {
   environment {
-    registry = "andrehpedrotti/app-python"
+    REGISTRYNAME = "andrehpedrotti/app-python"
     registryCredential = "dockerhub"
-    container_name = "app-py"
+    PROJECT = "app-py"
+    VERSIONBASE = "1.0"
     dockerImage = ''
   }
   agent any
@@ -16,7 +17,8 @@ pipeline {
     stage('Build Image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
+                    docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile .'
         }
       }
     }
@@ -30,7 +32,7 @@ pipeline {
     
     stage ('Run Container'){
       steps {
-          sh 'docker run -d -p 8000:8000 --name $container_name $registry:$BUILD_NUMBER'
+          sh 'docker run -d -p 80:8000 --name $container_name $registry:$BUILD_NUMBER'
       }
     }
   
