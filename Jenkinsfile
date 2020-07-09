@@ -17,7 +17,7 @@ pipeline {
     stage('Build Image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build REGISTRYNAME + ":$BUILD_NUMBER"
 
         }
       }
@@ -32,7 +32,7 @@ pipeline {
     
     stage ('Run Container'){
       steps {
-          sh 'docker run -d -p 80:8000 --name $PROJECT $registry:$BUILD_NUMBER'
+          sh 'docker run -d -p 80:8000 --name $PROJECT $REGISTRYNAME:$BUILD_NUMBER'
       }
     }
   
