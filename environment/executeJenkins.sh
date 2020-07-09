@@ -10,6 +10,6 @@ docker run -d -u root \
 --name ci-jenkins \
 jenkins/jenkins
 
-#docker exec -i ci-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+docker exec -i ci-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
 #--env-file=/var/jenkins_home/config/env.file  \

@@ -32,7 +32,7 @@ pipeline {
     
     stage ('Run Container'){
       steps {
-          sh 'docker run -d -p 80:8000 --name $PROJECT $REGISTRYNAME:$BUILD_NUMBER'
+          sh 'docker run -d --restart always -p 80:8000 --name $PROJECT $REGISTRYNAME:$BUILD_NUMBER'
       }
     }
   
