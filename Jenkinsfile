@@ -17,22 +17,22 @@ pipeline {
     stage('Build Image') {
       steps{
         script {
-          sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
-                    docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile .'
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+
         }
       }
     }
     
     stage ('Stop Existing container'){
       steps {
-        sh '[ -z $(docker ps -q --filter "name=$container_name") ] || docker stop $container_name && docker container prune -f'
+        sh '[ -z $(docker ps -q --filter "name=$PROJECT") ] || docker stop $PROJECT && docker container prune -f'
         /*sh 'docker container prune -f'*/
       }
     }
     
     stage ('Run Container'){
       steps {
-          sh 'docker run -d -p 80:8000 --name $container_name $registry:$BUILD_NUMBER'
+          sh 'docker run -d -p 80:8000 --name $PROJECT $registry:$BUILD_NUMBER'
       }
     }
   
