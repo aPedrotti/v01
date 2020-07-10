@@ -3,7 +3,7 @@ pipeline {
     PROJECT = "web-app-python"
     REGISTRYNAME = "andrehpedrotti"
     registryCredential = "dockerhub"
-    registry="$REGISTRYNAME/$PROJECT"
+    image="$REGISTRYNAME/$PROJECT"
     VERSIONBASE = "1.0"
     dockerImage = ''
   }
@@ -46,8 +46,9 @@ pipeline {
       steps {
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImage='$REGISTRYNAME/$PROJECT:$BUILD_NUMBER'
-            dockerImage.push() 
+            def customImage = docker.build("image:${env.BUILD_ID}")
+          /* Push the container to the custom Registry */
+            customImage.push()
           }
         }
       }
