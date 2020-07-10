@@ -25,11 +25,11 @@ pipeline {
     stage('Build updated image'){
       steps {
         script {
-          dockerImage = docker.build registry + ":${BUILD_NUMBER}", \
+          dockerImage = docker.build(registry:${BUILD_NUMBER}, \
                 arg "--build-arg REGISTRYNAME=$REGISTRYNAME", \
                 arg "--build-arg PROJECT=$PROJECT", \
                 arg "--build-arg VERSIONBASE=$VERSIONBASE", \
-                arg "-f ./docker/Dockerfile.prod ."
+                arg "-f ./docker/Dockerfile.prod .")
         }
       }
     }
