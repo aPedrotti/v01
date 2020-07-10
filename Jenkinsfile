@@ -18,11 +18,15 @@ pipeline {
     stage('Build Image') {
       steps {
         script {
-          dockerImage = docker.build("registry:${BUILD_NUMBER}", \
-              "--build-arg REGISTRYNAME=$REGISTRYNAME", \
-              "--build-arg PROJECT=$PROJECT", \
-              "--build-arg VERSIONBASE=$VERSIONBASE", \
-              "-f ./docker/Dockerfile.prod .")
+          sh '[ ! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
+                      docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
+        }
+        script {
+          sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
+              --build-arg REGISTRYNAME=$REGISTRYNAME \
+              --build-arg PROJECT=$PROJECT \
+              --build-arg VERSIONBASE=$VERSIONBASE \
+              -f ./docker/Dockerfile.prod .'
         }
       }
     }
@@ -36,7 +40,7 @@ pipeline {
     
     stage ('Run Container'){
       steps {
-        sh 'docker run -d --restart always -p 80:8000 --name $PROJECT $REGISTRYNAME/$PROJECT:$BUILD_NUMBER'
+        sh 'docker run -d --restart always -p 80:8000 --name $PROJECT $registry:$BUILD_NUMBER'
       }
     }
   
