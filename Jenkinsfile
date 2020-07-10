@@ -50,11 +50,9 @@ pipeline {
   
     stage('Push Image to Registry $registry') {
       steps {
-        script {
-          docker.withRegistry( '', registryCredential ) {
-          /* Push the container to the custom Registry */
-            dockerImage.push()
-          }
+        docker.withRegistry( '', registryCredential ) {
+        /* Push the container to the custom Registry */
+          dockerImage.push()
         }
       }
     }
