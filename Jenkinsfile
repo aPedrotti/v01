@@ -17,11 +17,9 @@ pipeline {
 
     stage('Build Image') {
       steps {
-        script {
-          sh '[ ! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
-                      docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
-        }
-        script {
+        scripts {
+          sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
+                        docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
           sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
               --build-arg REGISTRYNAME=$REGISTRYNAME \
               --build-arg PROJECT=$PROJECT \
@@ -49,6 +47,7 @@ pipeline {
         script {
           docker.withRegistry( '', registryCredential ) {
           /* Push the container to the custom Registry */
+            def dockerImage="$REGISTRYNAME/$PROJECT:${BUILD_NUMBER}"
             dockerImage.push()
           }
         }
