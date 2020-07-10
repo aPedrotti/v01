@@ -52,7 +52,7 @@ pipeline {
         script {
           docker.withRegistry( '', registryCredential ) {
           /* Push the container to the custom Registry */
-            sh 'docker push $registry:$BUILD_NUMBER}'
+            sh 'docker push $registry:$BUILD_NUMBER'
           }
         }
       }
