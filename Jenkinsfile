@@ -30,6 +30,7 @@ pipeline {
                 --build-arg PROJECT=$PROJECT \
                 --build-arg VERSIONBASE=$VERSIONBASE \
                 -f ./docker/Dockerfile.prod .'
+          dockerImage = "$REGISTRYNAME/$PROJECT:${BUILD_NUMBER}"
         }
       }
     }
@@ -47,7 +48,7 @@ pipeline {
       }
     }
   
-    stage('Deploy Image') {
+    stage('Push Image to Registry $registry') {
       steps {
         script {
           docker.withRegistry( '', registryCredential ) {
