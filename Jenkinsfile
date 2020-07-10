@@ -25,11 +25,11 @@ pipeline {
     stage('Build updated image'){
       steps {
         script {
-          dockerImage = docker.build("$registry" + ":${BUILD_NUMBER}", \
-                "--build-arg REGISTRYNAME=$REGISTRYNAME", \
-                "--build-arg PROJECT=$PROJECT", \
-                "--build-arg VERSIONBASE=$VERSIONBASE", \
-                "-f ./docker/Dockerfile.prod .")
+          sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
+                --build-arg REGISTRYNAME=$REGISTRYNAME \
+                --build-arg PROJECT=$PROJECT \
+                --build-arg VERSIONBASE=$VERSIONBASE \
+                -f ./docker/Dockerfile.prod .'
         }
       }
     }
@@ -52,7 +52,7 @@ pipeline {
         script {
           docker.withRegistry( '', registryCredential ) {
           /* Push the container to the custom Registry */
-            dockerImage.push()
+            sh 'docker push $registry:$BUILD_NUMBER}'
           }
         }
       }
