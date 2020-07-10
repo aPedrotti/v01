@@ -26,10 +26,10 @@ pipeline {
       steps {
         script {
           dockerImage = docker.build(registry:${BUILD_NUMBER}, \
-                arg "--build-arg REGISTRYNAME=$REGISTRYNAME", \
-                arg "--build-arg PROJECT=$PROJECT", \
-                arg "--build-arg VERSIONBASE=$VERSIONBASE", \
-                arg "-f ./docker/Dockerfile.prod .")
+                "--build-arg REGISTRYNAME=$REGISTRYNAME", \
+                "--build-arg PROJECT=$PROJECT", \
+                "--build-arg VERSIONBASE=$VERSIONBASE", \
+                "-f ./docker/Dockerfile.prod .")
         }
       }
     }
