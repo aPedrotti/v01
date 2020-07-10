@@ -18,10 +18,6 @@ pipeline {
     stage('Build Image') {
       steps {
         script {
-          sh '[ ! -z $(docker images -q $registry:$VERSIONBASE) ] || \
-                      docker build -t $registry:$VERSIONBASE -f ./docker/Dockerfile.base .'
-        }
-        script {
           dockerImage = docker.build("registry:${BUILD_NUMBER}", \
               "--build-arg REGISTRYNAME=$REGISTRYNAME", \
               "--build-arg PROJECT=$PROJECT", \
