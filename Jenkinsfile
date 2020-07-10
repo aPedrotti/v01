@@ -22,11 +22,11 @@ pipeline {
                       docker build -t $registry:$VERSIONBASE -f ./docker/Dockerfile.base .'
         }
         script {
-          dockerImage = docker.build("registry:${BUILD_NUMBER} \
-              --build-arg REGISTRYNAME=$REGISTRYNAME \
-              --build-arg PROJECT=$PROJECT \
-              --build-arg VERSIONBASE=$VERSIONBASE \
-              -f ./docker/Dockerfile.prod ."
+          dockerImage = docker.build("registry:${BUILD_NUMBER}", \
+              "--build-arg REGISTRYNAME=$REGISTRYNAME", \
+              "--build-arg PROJECT=$PROJECT", \
+              "--build-arg VERSIONBASE=$VERSIONBASE", \
+              "-f ./docker/Dockerfile.prod ."
         }
       }
     }
@@ -56,7 +56,7 @@ pipeline {
     }
 
     stage('Remove unused images') {
-      steps{
+      steps {
         //sh 'docker images rmi $registry:$BUILD_NUMBER'
         sh 'docker image prune -f -a'
       }
