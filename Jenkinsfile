@@ -4,7 +4,7 @@ pipeline {
     REGISTRYNAME = "andrehpedrotti"
     registryCredential = "dockerhub"
     registry="$REGISTRYNAME/$PROJECT"
-    VERSIONBASE = "1.0"
+    VERSIONBASE = "base"
     dockerImage = ''
   }
   agent any
@@ -18,7 +18,7 @@ pipeline {
     stage('Build Image') {
       steps {
         script {
-          sh '[! -z $(docker images -q $registry:$VERSIONBASE) ] || \
+          sh '[ ! -z $(docker images -q $registry:$VERSIONBASE) ] || \
                       docker build -t $registry:$VERSIONBASE -f ./docker/Dockerfile.base .'
         }
         script {
