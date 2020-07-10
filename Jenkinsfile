@@ -18,7 +18,9 @@ pipeline {
     stage('Build Image') {
       steps {
         script {
-          sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
+          sh 'if [! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ]; then \
+                    docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .; \
+              fi'
         }
       }
     }
@@ -36,7 +38,8 @@ pipeline {
 
     stage ('Stop Existing container'){
       steps {
-        sh '[ -z $(docker ps -q --filter "name=$PROJECT") ] || docker stop $PROJECT && docker container prune -f'
+        sh '[ -z $(docker ps -q --filter "name=$PROJECT") ] || \
+                docker stop $PROJECT && docker container prune -f'
         /*sh 'docker container prune -f'*/
       }
     }
