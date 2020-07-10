@@ -17,14 +17,14 @@ pipeline {
 
     stage('Build Image') {
       steps {
-        scripts {
+        script {
           sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
         }
       }
     }
     stage('Build updated image'){
       steps {
-        scripts {
+        script {
           sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
                 --build-arg REGISTRYNAME=$REGISTRYNAME \
                 --build-arg PROJECT=$PROJECT \
@@ -33,7 +33,7 @@ pipeline {
         }
       }
     }
-    
+
     stage ('Stop Existing container'){
       steps {
         sh '[ -z $(docker ps -q --filter "name=$PROJECT") ] || docker stop $PROJECT && docker container prune -f'
