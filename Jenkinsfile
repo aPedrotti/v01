@@ -13,10 +13,12 @@ pipeline {
         git 'https://github.com/apedrotti/v01.git'
       }
     }
-    
+
     stage('Build Image') {
       steps {
-        dockerImage = docker.build REGISTRYNAME + ":$BUILD_NUMBER"
+        script{
+          dockerImage = docker.build REGISTRYNAME + ":$BUILD_NUMBER"
+        }
       }
     }
     
@@ -35,8 +37,10 @@ pipeline {
   
     stage('Deploy Image') {
       steps {
-        docker.withRegistry( '', registryCredential ) {
-          dockerImage.push()
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
         }
       }
     }
@@ -46,6 +50,7 @@ pipeline {
         //sh 'docker images rmi $registry:$BUILD_NUMBER'
         sh 'docker image prune -f -a'
       }
-    } 
-  }
+    }
+
+  } /*End of stages*/
 }
