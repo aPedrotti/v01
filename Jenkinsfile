@@ -15,11 +15,8 @@ pipeline {
     }
     
     stage('Build Image') {
-      steps{
-        script {
-          dockerImage = docker.build REGISTRYNAME + ":$BUILD_NUMBER"
-
-        }
+      steps {
+        dockerImage = docker.build REGISTRYNAME + ":$BUILD_NUMBER"
       }
     }
     
@@ -32,16 +29,14 @@ pipeline {
     
     stage ('Run Container'){
       steps {
-          sh 'docker run -d --restart always -p 80:8000 --name $PROJECT $REGISTRYNAME:$BUILD_NUMBER'
+        sh 'docker run -d --restart always -p 80:8000 --name $PROJECT $REGISTRYNAME:$BUILD_NUMBER'
       }
     }
   
     stage('Deploy Image') {
-      steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-          }
+      steps {
+        docker.withRegistry( '', registryCredential ) {
+          dockerImage.push()
         }
       }
     }
