@@ -22,14 +22,15 @@ pipeline {
         }
       }
     }
-    stage('Build updated image')
-    steps {
-      scripts {
-        sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
-              --build-arg REGISTRYNAME=$REGISTRYNAME \
-              --build-arg PROJECT=$PROJECT \
-              --build-arg VERSIONBASE=$VERSIONBASE \
-              -f ./docker/Dockerfile.prod .'
+    stage('Build updated image'){
+      steps {
+        scripts {
+          sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
+                --build-arg REGISTRYNAME=$REGISTRYNAME \
+                --build-arg PROJECT=$PROJECT \
+                --build-arg VERSIONBASE=$VERSIONBASE \
+                -f ./docker/Dockerfile.prod .'
+        }
       }
     }
     
