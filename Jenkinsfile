@@ -18,14 +18,18 @@ pipeline {
     stage('Build Image') {
       steps {
         scripts {
-          sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
-                        docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
-          sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
+          sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
+        }
+      }
+    }
+    stage('Build updated image')
+    steps {
+      scripts {
+        sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
               --build-arg REGISTRYNAME=$REGISTRYNAME \
               --build-arg PROJECT=$PROJECT \
               --build-arg VERSIONBASE=$VERSIONBASE \
               -f ./docker/Dockerfile.prod .'
-        }
       }
     }
     
