@@ -3,7 +3,7 @@ pipeline {
     PROJECT = "web-app-python"
     REGISTRYNAME = "andrehpedrotti"
     registryCredential = "dockerhub"
-    image="$REGISTRYNAME/$PROJECT"
+    registry="$REGISTRYNAME/$PROJECT"
     VERSIONBASE = "1.0"
     dockerImage = ''
   }
@@ -18,13 +18,13 @@ pipeline {
     stage('Build Image') {
       steps {
         script{
-          sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
-                      docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
-          sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
+          sh '[! -z $(docker images -q $registry:$VERSIONBASE) ] || \
+                      docker build -t $registry:$VERSIONBASE -f ./docker/Dockerfile.base .'
+          dockerImage = docker.build("registry:${BUILD_NUMBER} \
               --build-arg REGISTRYNAME=$REGISTRYNAME \
               --build-arg PROJECT=$PROJECT \
               --build-arg VERSIONBASE=$VERSIONBASE \
-              -f ./docker/Dockerfile.prod .'
+              -f ./docker/Dockerfile.prod ."
         }
       }
     }
@@ -46,9 +46,8 @@ pipeline {
       steps {
         script {
           docker.withRegistry( '', registryCredential ) {
-            def customImage = docker.build("image:${env.BUILD_ID}")
           /* Push the container to the custom Registry */
-            customImage.push()
+            dockerImage.push()
           }
         }
       }
