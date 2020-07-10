@@ -18,7 +18,7 @@ pipeline {
       steps {
         script{
           sh '[! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
-                      docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f Dockerfile.base .'
+                      docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
           sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
               --build-arg REGISTRYNAME=$REGISTRYNAME \
               --build-arg PROJECT=$PROJECT \
