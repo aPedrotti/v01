@@ -53,7 +53,6 @@ pipeline {
         script {
           docker.withRegistry( '', registryCredential ) {
           /* Push the container to the custom Registry */
-            def dockerImage="$REGISTRYNAME/$PROJECT:$BUILD_NUMBER"
             dockerImage.push()
           }
         }
