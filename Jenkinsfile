@@ -1,8 +1,9 @@
 pipeline {
   environment {
+    PROJECT = "web-app-python"
     REGISTRYNAME = "andrehpedrotti"
     registryCredential = "dockerhub"
-    PROJECT = "web-app-python"
+    registry="$REGISTRYNAME/$PROJECT"
     VERSIONBASE = "1.0"
     dockerImage = ''
   }
@@ -44,11 +45,14 @@ pipeline {
     stage('Deploy Image') {
       steps {
         script {
-          sh 'docker push $REGISTRYNAME/$PROJECT:${BUILD_NUMBER}'
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage='$REGISTRYNAME/$PROJECT:$BUILD_NUMBER'
+            dockerImage.push() 
           }
         }
       }
-    
+    }
+
     stage('Remove unused images') {
       steps{
         //sh 'docker images rmi $registry:$BUILD_NUMBER'
