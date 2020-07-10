@@ -18,9 +18,8 @@ pipeline {
     stage('Build Image') {
       steps {
         script {
-          sh 'if [! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ]; then \
-                    docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .; \
-              fi'
+          sh '[ ! -z $(docker images -q $REGISTRYNAME/$PROJECT:$VERSIONBASE) ] || \
+                    docker build -t $REGISTRYNAME/$PROJECT:$VERSIONBASE -f ./docker/Dockerfile.base .'
         }
       }
     }
