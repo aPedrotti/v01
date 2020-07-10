@@ -24,8 +24,6 @@ pipeline {
               --build-arg PROJECT=$PROJECT \
               --build-arg VERSIONBASE =$VERSIONBASE \
               -f ./docker/Dockerfile.prod .'
-          
-
         }
       }
     }
@@ -50,7 +48,6 @@ pipeline {
           }
         }
       }
-    }
     
     stage('Remove unused images') {
       steps{
