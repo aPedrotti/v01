@@ -26,7 +26,7 @@ pipeline {
               "--build-arg REGISTRYNAME=$REGISTRYNAME", \
               "--build-arg PROJECT=$PROJECT", \
               "--build-arg VERSIONBASE=$VERSIONBASE", \
-              "-f ./docker/Dockerfile.prod ."
+              "-f ./docker/Dockerfile.prod .")
         }
       }
     }
