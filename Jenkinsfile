@@ -22,7 +22,7 @@ pipeline {
           sh 'docker build -t $REGISTRYNAME/$PROJECT:${BUILD_NUMBER} \
               --build-arg REGISTRYNAME=$REGISTRYNAME \
               --build-arg PROJECT=$PROJECT \
-              --build-arg VERSIONBASE =$VERSIONBASE \
+              --build-arg VERSIONBASE=$VERSIONBASE \
               -f ./docker/Dockerfile.prod .'
         }
       }
